@@ -36,28 +36,31 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       text-align: center;
-      padding: 25px;
-      background: radial-gradient(circle, rgba(0,0,0,0.1) 20%, rgba(2,0,5,0.75) 100%);
+      padding: 40px 20px;
+      pointer-events: none;
     }
 
     h1 {
-      font-size: clamp(2rem, 5.5vw, 3.8rem);
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
       color: #ffea00;
       text-shadow: 0 0 15px rgba(255, 234, 0, 0.8), 0 0 30px rgba(255, 170, 0, 0.6);
-      margin-bottom: 20px;
       font-weight: 800;
       line-height: 1.2;
     }
 
+    .messages-container {
+      margin-bottom: 20px;
+    }
+
     .distance-msg {
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-size: clamp(1.1rem, 2.8vw, 1.5rem);
       color: #fff8e1;
       max-width: 600px;
-      margin-bottom: 25px;
-      line-height: 1.5;
+      margin-bottom: 10px;
+      line-height: 1.4;
       text-shadow: 0 2px 10px rgba(0,0,0,0.9);
       font-weight: 600;
     }
@@ -66,7 +69,7 @@
       font-size: clamp(1rem, 2.2vw, 1.25rem);
       color: #ffd700;
       max-width: 500px;
-      line-height: 1.6;
+      line-height: 1.5;
       text-shadow: 0 2px 8px rgba(0,0,0,0.8);
       font-style: italic;
     }
@@ -88,24 +91,7 @@
       font-size: 1.2rem;
       cursor: pointer;
       backdrop-filter: blur(5px);
-    }
-
-    .floating-element {
-      position: absolute;
-      pointer-events: none;
-      z-index: 5;
-      animation: floatAnimation linear infinite;
-    }
-
-    @keyframes floatAnimation {
-      0% {
-        transform: translateY(105vh) rotate(0deg);
-        opacity: 0.95;
-      }
-      100% {
-        transform: translateY(-10vh) rotate(360deg);
-        opacity: 0;
-      }
+      pointer-events: auto;
     }
   </style>
 </head>
@@ -117,95 +103,125 @@
 
   <div class="interface">
     <h1>Feliz día de las flores amarillas mi Fer 🌻</h1>
-    <p class="distance-msg">
-      Sé que estoy lejos pero no olvides que te amo y te extraño.
-    </p>
-    <p class="sub-msg">
-      Aún no olvido tu mirada y tu cariño.
-    </p>
+    
+    <div class="messages-container">
+      <p class="distance-msg">
+        Sé que estoy lejos pero no olvides que te amo y te extraño.
+      </p>
+      <p class="sub-msg">
+        Aún no olvido tu mirada y tu cariño.
+      </p>
+    </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.min.js"></script>
   
   <script>
-    // --- ESCENA THREE.JS (EFECTO GALAXIA DEL VIDEO) ---
+    // --- ESCENA THREE.JS ---
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 4;
+    camera.position.z = 7;
 
     const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Shader Nebulosa
-    const nebulaGeometry = new THREE.PlaneGeometry(15, 15);
-    const nebulaMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 }
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        varying vec2 vUv;
-
-        void main() {
-          vec2 st = vUv * 2.0 - 1.0;
-          float t = uTime * 0.2;
-          
-          float d = length(st);
-          vec3 color1 = vec3(0.02, 0.0, 0.08); 
-          vec3 color2 = vec3(0.3, 0.0, 0.4);  
-          vec3 color3 = vec3(1.0, 0.8, 0.2);  
-
-          vec3 finalColor = mix(color1, color2, smoothstep(0.0, 1.2, d + sin(t)*0.2));
-          finalColor = mix(finalColor, color3, (1.0 - d) * 0.25);
-
-          gl_FragColor = vec4(finalColor, 1.0);
-        }
-      `
+    // --- PLANETA VENUS (CENTRAL) ---
+    const planetGeometry = new THREE.SphereGeometry(1.6, 64, 64);
+    
+    // Textura/Material del Planeta brillante tipo Venus
+    const planetMaterial = new THREE.MeshPhongMaterial({
+      color: 0xffaa00,
+      emissive: 0x552200,
+      specular: 0xffea00,
+      shininess: 25,
+      wireframe: false
     });
 
-    const nebulaMesh = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
-    nebulaMesh.position.z = -2;
-    scene.add(nebulaMesh);
+    const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+    scene.add(planet);
 
-    // Partículas brillantes
-    const starsCount = 900;
-    const geometry = new THREE.BufferGeometry();
+    // Luz ambiental y puntual para dar volumen al planeta
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xffea00, 2, 50);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
+
+    // --- RAMOS DE FLORES GIRANDO ALREDEDOR ---
+    function createFlowerTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 128;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.font = '90px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('💐', 64, 64);
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    const flowerTexture = createFlowerTexture();
+    const flowerMaterial = new THREE.SpriteMaterial({ map: flowerTexture, transparent: true });
+
+    const flowerGroup = new THREE.Group();
+    const flowerCount = 18;
+    const orbitRadius = 3.2;
+
+    for (let i = 0; i < flowerCount; i++) {
+      const sprite = new THREE.Sprite(flowerMaterial);
+      const angle = (i / flowerCount) * Math.PI * 2;
+      
+      sprite.position.x = Math.cos(angle) * orbitRadius;
+      sprite.position.z = Math.sin(angle) * orbitRadius;
+      sprite.position.y = (Math.random() - 0.5) * 0.8;
+      sprite.scale.set(0.8, 0.8, 0.8);
+      
+      flowerGroup.add(sprite);
+    }
+
+    // Inclinamos ligeramente la órbita para mejor efecto 3D
+    flowerGroup.rotation.x = 0.3;
+    flowerGroup.rotation.z = -0.2;
+    scene.add(flowerGroup);
+
+    // --- FONDO DE ESTRELLAS/PARTÍCULAS ---
+    const starsCount = 600;
+    const starGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(starsCount * 3);
 
     for (let i = 0; i < starsCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * 10;
-      positions[i + 1] = (Math.random() - 0.5) * 10;
-      positions[i + 2] = (Math.random() - 0.5) * 8;
+      positions[i] = (Math.random() - 0.5) * 20;
+      positions[i + 1] = (Math.random() - 0.5) * 20;
+      positions[i + 2] = (Math.random() - 0.5) * 20;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    const starsMaterial = new THREE.PointsMaterial({
-      size: 0.035,
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const starMaterial = new THREE.PointsMaterial({
+      size: 0.04,
       color: 0xffea00,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.7
     });
 
-    const starParticles = new THREE.Points(geometry, starsMaterial);
+    const starParticles = new THREE.Points(starGeometry, starMaterial);
     scene.add(starParticles);
 
+    // --- ANIMACIÓN ---
     const clock = new THREE.Clock();
     function animate() {
       const elapsedTime = clock.getElapsedTime();
-      nebulaMaterial.uniforms.uTime.value = elapsedTime;
 
-      starParticles.rotation.y = elapsedTime * 0.04;
-      starParticles.rotation.x = elapsedTime * 0.02;
+      // Rotación del planeta sobre su eje
+      planet.rotation.y = elapsedTime * 0.2;
+
+      // Rotación de los ramos alrededor del planeta
+      flowerGroup.rotation.y = elapsedTime * 0.5;
+
+      // Movimiento suave de fondo
+      starParticles.rotation.y = elapsedTime * 0.02;
 
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
@@ -217,25 +233,6 @@
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
-
-    // --- FLORES Y EMOTICONES FLOTANTES ---
-    function createFloatingFlower() {
-      const el = document.createElement('div');
-      el.classList.add('floating-element');
-      
-      const items = ['🌻', '🌼', '✨', '💛'];
-      el.innerText = items[Math.floor(Math.random() * items.length)];
-      
-      el.style.left = Math.random() * 95 + 'vw';
-      el.style.fontSize = (Math.random() * 22 + 18) + 'px';
-      
-      const duration = Math.random() * 5 + 5;
-      el.style.animationDuration = duration + 's';
-
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), duration * 1000);
-    }
-    setInterval(createFloatingFlower, 400);
 
     // --- AUDIO ---
     let audioCtx = null;
