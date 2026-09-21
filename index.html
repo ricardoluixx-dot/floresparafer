@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Para Fer 🌻</title>
   <style>
     * {
@@ -15,21 +15,43 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #020005;
-      font-family: system-ui, -apple-system, Roboto, sans-serif;
+      background: #05020a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: #ffffff;
     }
 
-    #webgl-canvas {
+    /* Fondo Galaxia Dorada */
+    .galaxy-bg {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      background: radial-gradient(circle at center, #3d2a00 0%, #1a0c2e 50%, #030108 100%);
       z-index: 1;
     }
 
-    .interface {
+    .glow-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,215,0,0.35) 0%, rgba(255,140,0,0.15) 50%, rgba(0,0,0,0) 70%);
+      border-radius: 50%;
+      filter: blur(20px);
+      animation: pulseGlow 4s ease-in-out infinite alternate;
+      z-index: 2;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.6; }
+      100% { transform: translate(-50%, -50%) scale(1.25); opacity: 1; }
+    }
+
+    /* Contenedor Principal */
+    .container {
       position: relative;
       z-index: 10;
       width: 100%;
@@ -39,48 +61,99 @@
       justify-content: space-between;
       align-items: center;
       text-align: center;
-      padding: 40px 20px;
+      padding: 50px 20px 30px 20px;
       pointer-events: none;
     }
 
     h1 {
-      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
       color: #ffea00;
-      text-shadow: 0 0 15px rgba(255, 234, 0, 0.8), 0 0 30px rgba(255, 170, 0, 0.6);
+      text-shadow: 0 0 12px rgba(255, 234, 0, 0.9), 0 0 25px rgba(255, 170, 0, 0.7);
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.25;
     }
 
-    .messages-container {
+    /* Ramo de Flores Central Giratorio */
+    .bouquet-wrapper {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bouquet {
+      font-size: clamp(90px, 25vw, 140px);
+      filter: drop-shadow(0 0 20px rgba(255, 234, 0, 0.8)) drop-shadow(0 0 40px rgba(255, 140, 0, 0.5));
+      animation: rotateBouquet 12s linear infinite;
+      transform-origin: center center;
+    }
+
+    @keyframes rotateBouquet {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .messages {
       margin-bottom: 20px;
     }
 
     .distance-msg {
-      font-size: clamp(1.1rem, 2.8vw, 1.5rem);
-      color: #fff8e1;
-      max-width: 600px;
-      margin-bottom: 10px;
+      font-size: clamp(1.1rem, 3.8vw, 1.4rem);
+      color: #ffffff;
+      max-width: 500px;
+      margin-bottom: 8px;
       line-height: 1.4;
       text-shadow: 0 2px 10px rgba(0,0,0,0.9);
       font-weight: 600;
     }
 
     .sub-msg {
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      font-size: clamp(0.95rem, 3.2vw, 1.15rem);
       color: #ffd700;
-      max-width: 500px;
-      line-height: 1.5;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      max-width: 450px;
+      line-height: 1.4;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
       font-style: italic;
     }
 
+    /* Partículas y flores flotantes */
+    .particle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(105vh) rotate(0deg) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.9;
+      }
+      80% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Botón de Audio */
     .audio-btn {
       position: fixed;
-      bottom: 20px;
+      bottom: 25px;
       right: 20px;
       z-index: 50;
-      background: rgba(255, 215, 0, 0.2);
-      border: 1px solid #ffd700;
+      background: rgba(255, 215, 0, 0.25);
+      border: 1.5px solid #ffd700;
       color: #ffd700;
       width: 48px;
       height: 48px;
@@ -88,23 +161,29 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       pointer-events: auto;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <canvas id="webgl-canvas"></canvas>
+  <div class="galaxy-bg"></div>
+  <div class="glow-core"></div>
 
-  <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">🎵</button>
+  <!-- Ramo Central -->
+  <div class="bouquet-wrapper">
+    <div class="bouquet">💐</div>
+  </div>
 
-  <div class="interface">
+  <div class="container">
     <h1>Feliz día de las flores amarillas mi Fer 🌻</h1>
-    
-    <div class="messages-container">
+
+    <div class="messages">
       <p class="distance-msg">
         Sé que estoy lejos pero no olvides que te amo y te extraño.
       </p>
@@ -114,127 +193,35 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.min.js"></script>
-  
+  <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">🎵</button>
+
   <script>
-    // --- ESCENA THREE.JS ---
-    const canvas = document.getElementById('webgl-canvas');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 7;
-
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // --- PLANETA VENUS (CENTRAL) ---
-    const planetGeometry = new THREE.SphereGeometry(1.6, 64, 64);
+    // Generador de flores y destellos flotantes
+    const items = ['🌻', '🌼', '✨', '💛', '🌸', '⭐'];
     
-    // Textura/Material del Planeta brillante tipo Venus
-    const planetMaterial = new THREE.MeshPhongMaterial({
-      color: 0xffaa00,
-      emissive: 0x552200,
-      specular: 0xffea00,
-      shininess: 25,
-      wireframe: false
-    });
-
-    const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-    scene.add(planet);
-
-    // Luz ambiental y puntual para dar volumen al planeta
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-    scene.add(ambientLight);
-
-    const pointLight = new THREE.PointLight(0xffea00, 2, 50);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
-
-    // --- RAMOS DE FLORES GIRANDO ALREDEDOR ---
-    function createFlowerTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 128;
-      canvas.height = 128;
-      const ctx = canvas.getContext('2d');
-      ctx.font = '90px serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('💐', 64, 64);
-      return new THREE.CanvasTexture(canvas);
-    }
-
-    const flowerTexture = createFlowerTexture();
-    const flowerMaterial = new THREE.SpriteMaterial({ map: flowerTexture, transparent: true });
-
-    const flowerGroup = new THREE.Group();
-    const flowerCount = 18;
-    const orbitRadius = 3.2;
-
-    for (let i = 0; i < flowerCount; i++) {
-      const sprite = new THREE.Sprite(flowerMaterial);
-      const angle = (i / flowerCount) * Math.PI * 2;
+    function createParticle() {
+      const p = document.createElement('div');
+      p.classList.add('particle');
+      p.innerText = items[Math.floor(Math.random() * items.length)];
       
-      sprite.position.x = Math.cos(angle) * orbitRadius;
-      sprite.position.z = Math.sin(angle) * orbitRadius;
-      sprite.position.y = (Math.random() - 0.5) * 0.8;
-      sprite.scale.set(0.8, 0.8, 0.8);
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.fontSize = (Math.random() * 20 + 16) + 'px';
       
-      flowerGroup.add(sprite);
+      const duration = Math.random() * 4 + 5; // Duración entre 5s y 9s
+      p.style.animationDuration = duration + 's';
+      p.style.filter = `drop-shadow(0 0 8px rgba(255, 234, 0, 0.8))`;
+
+      document.body.appendChild(p);
+
+      setTimeout(() => {
+        p.remove();
+      }, duration * 1000);
     }
 
-    // Inclinamos ligeramente la órbita para mejor efecto 3D
-    flowerGroup.rotation.x = 0.3;
-    flowerGroup.rotation.z = -0.2;
-    scene.add(flowerGroup);
+    // Crear partículas continuamente
+    setInterval(createParticle, 300);
 
-    // --- FONDO DE ESTRELLAS/PARTÍCULAS ---
-    const starsCount = 600;
-    const starGeometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(starsCount * 3);
-
-    for (let i = 0; i < starsCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * 20;
-      positions[i + 1] = (Math.random() - 0.5) * 20;
-      positions[i + 2] = (Math.random() - 0.5) * 20;
-    }
-
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const starMaterial = new THREE.PointsMaterial({
-      size: 0.04,
-      color: 0xffea00,
-      transparent: true,
-      opacity: 0.7
-    });
-
-    const starParticles = new THREE.Points(starGeometry, starMaterial);
-    scene.add(starParticles);
-
-    // --- ANIMACIÓN ---
-    const clock = new THREE.Clock();
-    function animate() {
-      const elapsedTime = clock.getElapsedTime();
-
-      // Rotación del planeta sobre su eje
-      planet.rotation.y = elapsedTime * 0.2;
-
-      // Rotación de los ramos alrededor del planeta
-      flowerGroup.rotation.y = elapsedTime * 0.5;
-
-      // Movimiento suave de fondo
-      starParticles.rotation.y = elapsedTime * 0.02;
-
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // --- AUDIO ---
+    // Reproductor de sonido interactivo
     let audioCtx = null;
     let isPlaying = false;
     let osc = null;
@@ -247,8 +234,8 @@
         const gain = audioCtx.createGain();
 
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(329.63, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(329.63, audioCtx.currentTime); // Nota E4
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
 
         osc.connect(gain);
         gain.connect(audioCtx.destination);
