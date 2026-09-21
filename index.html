@@ -1,342 +1,358 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para Fer 🌻✨</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz día de las flores amarillas mi Fer 🌻✨</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
 
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
-      background: #030108;
-      color: #fff;
-    }
+body, html {
+width: 100%;
+height: 100%;
+overflow: hidden;
+font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+background: #030108;
+color: #fff;
+}
 
-    /* Canvas Galaxia */
-    #galaxyCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
+/* Canvas Galaxia */
+#galaxyCanvas {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1;
+}
 
-    /* Contenedor Principal */
-    .container {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-      background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(3,1,8,0.75) 100%);
-    }
+/* Contenedor Principal */
+.container {
+position: relative;
+z-index: 10;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+height: 100vh;
+text-align: center;
+padding: 20px;
+background: radial-gradient(circle, rgba(0,0,0,0.15) 0%, rgba(3,1,8,0.85) 100%);
+}
 
-    .main-flower {
-      font-size: 4.5rem;
-      margin-bottom: 10px;
-      animation: pulseGlow 2.5s infinite ease-in-out;
-      filter: drop-shadow(0 0 20px #ffd700);
-    }
+.main-flower {
+font-size: 4.8rem;
+margin-bottom: 15px;
+animation: pulseGlow 2.5s infinite ease-in-out;
+filter: drop-shadow(0 0 25px #ffd700);
+}
 
-    h1 {
-      font-size: 2.8rem;
-      color: #ffea00;
-      text-shadow: 0 0 15px rgba(255, 234, 0, 0.9), 0 0 35px rgba(255, 215, 0, 0.7);
-      margin-bottom: 15px;
-      font-weight: 700;
-    }
+h1 {
+font-size: 2.3rem;
+color: #ffea00;
+text-shadow: 0 0 15px rgba(255, 234, 0, 0.9), 0 0 35px rgba(255, 215, 0, 0.7);
+margin-bottom: 15px;
+font-weight: 800;
+padding: 0 10px;
+}
 
-    p.subtitle {
-      font-size: 1.25rem;
-      max-width: 500px;
-      line-height: 1.6;
-      text-shadow: 0 0 12px rgba(0,0,0,0.9);
-      color: #fff8e1;
-      margin-bottom: 30px;
-    }
+p.subtitle {
+font-size: 1.2rem;
+max-width: 520px;
+line-height: 1.6;
+text-shadow: 0 0 12px rgba(0,0,0,0.9);
+color: #fff8e1;
+margin-bottom: 25px;
+padding: 0 15px;
+}
 
-    .btn-letter {
-      background: linear-gradient(135deg, #ffd700, #ff9100);
-      color: #111;
-      border: none;
-      padding: 14px 28px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-      transition: all 0.3s ease;
-    }
+.distance-message {
+font-size: 1.15rem;
+color: #ffd54f;
+font-style: italic;
+max-width: 480px;
+margin-bottom: 30px;
+text-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
+padding: 0 15px;
+}
 
-    .btn-letter:active {
-      transform: scale(0.95);
-    }
+.btn-letter {
+background: linear-gradient(135deg, #ffd700, #ff9100);
+color: #111;
+border: none;
+padding: 14px 30px;
+font-size: 1.1rem;
+font-weight: bold;
+border-radius: 50px;
+cursor: pointer;
+box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+transition: all 0.3s ease;
+}
 
-    /* Modal / Carta Secreta */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-    }
+.btn-letter:active {
+transform: scale(0.95);
+}
 
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+/* Modal / Carta Secreta */
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.85);
+backdrop-filter: blur(8px);
+z-index: 100;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.5s ease;
+}
 
-    .letter-card {
-      background: rgba(20, 10, 30, 0.9);
-      border: 2px solid #ffd700;
-      border-radius: 20px;
-      padding: 30px 25px;
-      max-width: 90%;
-      width: 420px;
-      text-align: center;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-      transform: translateY(30px);
-      transition: transform 0.5s ease;
-    }
+.modal-overlay.active {
+opacity: 1;
+pointer-events: auto;
+}
 
-    .modal-overlay.active .letter-card {
-      transform: translateY(0);
-    }
+.letter-card {
+background: rgba(20, 10, 30, 0.95);
+border: 2px solid #ffd700;
+border-radius: 20px;
+padding: 30px 25px;
+max-width: 90%;
+width: 420px;
+text-align: center;
+box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+transform: translateY(30px);
+transition: transform 0.5s ease;
+}
 
-    .letter-card h2 {
-      color: #ffd700;
-      font-size: 2rem;
-      margin-bottom: 15px;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    }
+.modal-overlay.active .letter-card {
+transform: translateY(0);
+}
 
-    .letter-card p {
-      color: #fff;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
+.letter-card h2 {
+color: #ffd700;
+font-size: 1.8rem;
+margin-bottom: 15px;
+text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
 
-    .close-btn {
-      background: transparent;
-      border: 1px solid #ffd700;
-      color: #ffd700;
-      padding: 8px 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 0.95rem;
-    }
+.letter-card p {
+color: #fff;
+font-size: 1.05rem;
+line-height: 1.7;
+margin-bottom: 20px;
+}
 
-    /* Botón de Música Flotante */
-    .music-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 50;
-      background: rgba(255, 215, 0, 0.2);
-      border: 1px solid #ffd700;
-      color: #ffd700;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.3rem;
-      cursor: pointer;
-      backdrop-filter: blur(5px);
-    }
+.close-btn {
+background: transparent;
+border: 1px solid #ffd700;
+color: #ffd700;
+padding: 8px 22px;
+border-radius: 25px;
+cursor: pointer;
+font-size: 0.95rem;
+}
 
-    /* Flores flotantes */
-    .floating-flower {
-      position: absolute;
-      z-index: 5;
-      pointer-events: none;
-      animation: floatUp linear infinite;
-    }
+/* Botón de Música Flotante */
+.music-toggle {
+position: fixed;
+bottom: 20px;
+right: 20px;
+z-index: 50;
+background: rgba(255, 215, 0, 0.2);
+border: 1px solid #ffd700;
+color: #ffd700;
+width: 48px;
+height: 48px;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 1.3rem;
+cursor: pointer;
+backdrop-filter: blur(5px);
+}
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(105vh) rotate(0deg);
-        opacity: 0.9;
-      }
-      100% {
-        transform: translateY(-10vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
+/* Flores flotantes */
+.floating-flower {
+position: absolute;
+z-index: 5;
+pointer-events: none;
+animation: floatUp linear infinite;
+}
 
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px #ffd700); }
-      50% { transform: scale(1.08); filter: drop-shadow(0 0 25px #ffea00); }
-    }
-  </style>
+@keyframes floatUp {
+0% {
+transform: translateY(105vh) rotate(0deg);
+opacity: 0.9;
+}
+100% {
+transform: translateY(-10vh) rotate(360deg);
+opacity: 0;
+}
+}
+
+@keyframes pulseGlow {
+0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px #ffd700); }
+50% { transform: scale(1.08); filter: drop-shadow(0 0 25px #ffea00); }
+}
+</style>
 </head>
 <body>
 
-  <!-- Canvas de la Galaxia -->
-  <canvas id="galaxyCanvas"></canvas>
+<!-- Canvas de la Galaxia -->
+<canvas id="galaxyCanvas"></canvas>
 
-  <!-- Botón de Música -->
-  <button class="music-toggle" id="musicBtn" onclick="toggleAudio()">🎵</button>
+<!-- Botón de Música -->
+<button class="music-toggle" id="musicBtn" onclick="toggleAudio()">🎵</button>
 
-  <!-- Contenido Principal -->
-  <div class="container">
-    <div class="main-flower">🌻✨</div>
-    <h1>Para Fer 💛</h1>
-    <p class="subtitle">
-      Entre millones de estrellas y galaxias, tus ojos siempre tienen la luz más hermosa del universo.
-    </p>
-    <button class="btn-letter" onclick="openLetter()">Abrir Mensaje 💌</button>
-  </div>
+<!-- Contenido Principal -->
+<div class="container">
+<div class="main-flower">🌻✨</div>
+<h1>Feliz día de las flores amarillas mi Fer 💛</h1>
+<p class="subtitle">
+Entre millones de estrellas y galaxias, tus ojos siempre tienen la luz más hermosa del universo.
+</p>
+<p class="distance-message">
+"Sé que estoy lejos pero no olvides que te amo y te extraño."
+</p>
+<button class="btn-letter" onclick="openLetter()">Abrir Mensaje 💌</button>
+</div>
 
-  <!-- Modal / Carta -->
-  <div class="modal-overlay" id="letterModal">
-    <div class="letter-card">
-      <h2>Para Fer ✨</h2>
-      <p>
-        Aún no olvido tu mirada ni tu cariño. Como las estrellas en el universo y la luz brillante de estas flores amarillas, tu presencia siempre iluminará todo a su alrededor. 🌻💛
-      </p>
-      <button class="close-btn" onclick="closeLetter()">Cerrar ✨</button>
-    </div>
-  </div>
+<!-- Modal / Carta -->
+<div class="modal-overlay" id="letterModal">
+<div class="letter-card">
+<h2>Para Ti, Mi Fer ✨</h2>
+<p>
+Aún no olvido tu mirada ni tu cariño. Aunque hoy exista distancia entre nosotros, mi amor por ti cruza cualquier espacio. Como las estrellas en el universo y la luz brillante de estas flores amarillas, tu presencia siempre ilumina todo mi mundo. 🌻💛
+</p>
+<button class="close-btn" onclick="closeLetter()">Cerrar ✨</button>
+</div>
+</div>
 
-  <script>
-    // Configuración del Canvas (Galaxia 3D)
-    const canvas = document.getElementById('galaxyCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let stars = [];
+<script>
+// Configuración del Canvas (Galaxia 3D)
+const canvas = document.getElementById('galaxyCanvas');
+const ctx = canvas.getContext('2d');
+let width, height;
+let stars = [];
 
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
+function resize() {
+width = canvas.width = window.innerWidth;
+height = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
 
-    class Star {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = (Math.random() - 0.5) * width * 2;
-        this.y = (Math.random() - 0.5) * height * 2;
-        this.z = Math.random() * width;
-        this.size = Math.random() * 2 + 0.5;
-        const colors = ['#ffffff', '#ffea00', '#ffd700', '#e040fb', '#7c4dff', '#ff9100'];
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-      }
-      update() {
-        this.z -= 1.2;
-        if (this.z <= 0) {
-          this.reset();
-          this.z = width;
-        }
-      }
-      draw() {
-        let sx = (this.x / this.z) * (width / 2) + width / 2;
-        let sy = (this.y / this.z) * (height / 2) + height / 2;
-        let radius = (1 - this.z / width) * this.size * 2;
-        if (radius < 0) radius = 0;
+class Star {
+constructor() {
+this.reset();
+}
+reset() {
+this.x = (Math.random() - 0.5) * width * 2;
+this.y = (Math.random() - 0.5) * height * 2;
+this.z = Math.random() * width;
+this.size = Math.random() * 2 + 0.5;
+const colors = ['#ffffff', '#ffea00', '#ffd700', '#e040fb', '#7c4dff', '#ff9100'];
+this.color = colors[Math.floor(Math.random() * colors.length)];
+}
+update() {
+this.z -= 1.2;
+if (this.z <= 0) {
+this.reset();
+this.z = width;
+}
+}
+draw() {
+let sx = (this.x / this.z) * (width / 2) + width / 2;
+let sy = (this.y / this.z) * (height / 2) + height / 2;
+let radius = (1 - this.z / width) * this.size * 2;
+if (radius < 0) radius = 0;
 
-        ctx.beginPath();
-        ctx.arc(sx, sy, radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = this.color;
-        ctx.fill();
-      }
-    }
+ctx.beginPath();
+ctx.arc(sx, sy, radius, 0, Math.PI * 2);
+ctx.fillStyle = this.color;
+ctx.shadowBlur = 8;
+ctx.shadowColor = this.color;
+ctx.fill();
+}
+}
 
-    for (let i = 0; i < 450; i++) {
-      stars.push(new Star());
-    }
+for (let i = 0; i < 450; i++) {
+stars.push(new Star());
+}
 
-    function animate() {
-      ctx.fillStyle = 'rgba(3, 1, 8, 0.3)';
-      ctx.fillRect(0, 0, width, height);
-      stars.forEach(s => {
-        s.update();
-        s.draw();
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
+function animate() {
+ctx.fillStyle = 'rgba(3, 1, 8, 0.3)';
+ctx.fillRect(0, 0, width, height);
+stars.forEach(s => {
+s.update();
+s.draw();
+});
+requestAnimationFrame(animate);
+}
+animate();
 
-    // Flores amarillas flotantes
-    function createFlower() {
-      const flower = document.createElement('div');
-      flower.classList.add('floating-flower');
-      const icons = ['🌻', '🌼', '✨', '💛'];
-      flower.innerText = icons[Math.floor(Math.random() * icons.length)];
-      flower.style.left = Math.random() * 95 + 'vw';
-      flower.style.fontSize = (Math.random() * 22 + 16) + 'px';
-      
-      const duration = Math.random() * 5 + 5;
-      flower.style.animationDuration = duration + 's';
+// Flores amarillas flotantes
+function createFlower() {
+const flower = document.createElement('div');
+flower.classList.add('floating-flower');
+const icons = ['🌻', '🌼', '✨', '💛'];
+flower.innerText = icons[Math.floor(Math.random() * icons.length)];
+flower.style.left = Math.random() * 95 + 'vw';
+flower.style.fontSize = (Math.random() * 22 + 16) + 'px';
 
-      document.body.appendChild(flower);
-      setTimeout(() => flower.remove(), duration * 1000);
-    }
-    setInterval(createFlower, 500);
+const duration = Math.random() * 5 + 5;
+flower.style.animationDuration = duration + 's';
 
-    // Control del Modal
-    function openLetter() {
-      document.getElementById('letterModal').classList.add('active');
-      for(let i=0; i<15; i++) setTimeout(createFlower, i*100);
-    }
-    function closeLetter() {
-      document.getElementById('letterModal').classList.remove('active');
-    }
+document.body.appendChild(flower);
+setTimeout(() => flower.remove(), duration * 1000);
+}
+setInterval(createFlower, 500);
 
-    // Audio Ambiental Generativo
-    let audioCtx = null;
-    let isPlaying = false;
-    let oscillator = null;
+// Control del Modal
+function openLetter() {
+document.getElementById('letterModal').classList.add('active');
+for(let i=0; i<15; i++) setTimeout(createFlower, i*100);
+}
+function closeLetter() {
+document.getElementById('letterModal').classList.remove('active');
+}
 
-    function toggleAudio() {
-      const btn = document.getElementById('musicBtn');
-      if (!isPlaying) {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // Nota suave A3
-        gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        isPlaying = true;
-        btn.innerText = '🔊';
-      } else {
-        if (oscillator) oscillator.stop();
-        isPlaying = false;
-        btn.innerText = '🎵';
-      }
-    }
-  </script>
+// Audio Ambiental
+let audioCtx = null;
+let isPlaying = false;
+let oscillator = null;
+
+function toggleAudio() {
+const btn = document.getElementById('musicBtn');
+if (!isPlaying) {
+if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+oscillator = audioCtx.createOscillator();
+const gainNode = audioCtx.createGain();
+oscillator.type = 'sine';
+oscillator.frequency.setValueAtTime(220, audioCtx.currentTime);
+gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+oscillator.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+oscillator.start();
+isPlaying = true;
+btn.innerText = '🔊';
+} else {
+if (oscillator) oscillator.stop();
+isPlaying = false;
+btn.innerText = '🎵';
+}
+}
+</script>
 </body>
 </html>
+
